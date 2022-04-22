@@ -139,7 +139,7 @@ export class Coin98WalletAdapter extends BaseMessageSignerWalletAdapter {
             if (!wallet) throw new WalletNotConnectedError();
 
             try {
-                const response = await wallet.request({ method: 'sol_sign', params: [transaction] });
+                const response = await wallet.request({ method: 'sand_sign', params: [transaction] });
 
                 const publicKey = new PublicKey(response.publicKey);
                 const signature = bs58.decode(response.signature);
@@ -161,7 +161,7 @@ export class Coin98WalletAdapter extends BaseMessageSignerWalletAdapter {
             if (!wallet) throw new WalletNotConnectedError();
 
             try {
-                const response = await wallet.request({ method: 'sol_signAllTransactions', params: [transactions] });
+                const response = await wallet.request({ method: 'sand_signAllTransactions', params: [transactions] });
 
                 const publicKey = new PublicKey(response.publicKey);
                 const signatures = response.signatures;
@@ -185,7 +185,7 @@ export class Coin98WalletAdapter extends BaseMessageSignerWalletAdapter {
             const wallet = this._wallet;
             if (!wallet) throw new WalletNotConnectedError();
             try {
-                const response = await wallet.request({ method: 'sol_signMessage', params: [message] });
+                const response = await wallet.request({ method: 'sand_signMessage', params: [message] });
 
                 return bs58.decode(response.signature);
             } catch (error: any) {
