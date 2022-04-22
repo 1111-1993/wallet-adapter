@@ -1,4 +1,4 @@
-import type SolWalletAdapter from '@project-serum/sand-wallet-adapter';
+import type SolWalletAdapter from '@project-serum/sol-wallet-adapter';
 import {
     BaseMessageSignerWalletAdapter,
     scopePollingDetectionStrategy,
@@ -102,7 +102,7 @@ export abstract class BaseSolletWalletAdapter extends BaseMessageSignerWalletAda
 
             let SolWalletAdapterClass: typeof SolWalletAdapter;
             try {
-                ({ default: SolWalletAdapterClass } = await import('@project-serum/sand-wallet-adapter'));
+                ({ default: SolWalletAdapterClass } = await import('@project-serum/sol-wallet-adapter'));
             } catch (error: any) {
                 throw new WalletLoadError(error?.message, error);
             }
