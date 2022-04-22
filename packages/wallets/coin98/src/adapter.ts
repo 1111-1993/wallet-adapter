@@ -27,7 +27,7 @@ interface Coin98Wallet {
 
 interface Coin98Window extends Window {
     coin98?: {
-        sol?: Coin98Wallet;
+        sand?: Coin98Wallet;
     };
 }
 
@@ -59,7 +59,7 @@ export class Coin98WalletAdapter extends BaseMessageSignerWalletAdapter {
 
         if (this._readyState !== WalletReadyState.Unsupported) {
             scopePollingDetectionStrategy(() => {
-                if (window.coin98?.sol) {
+                if (window.coin98?.sand) {
                     this._readyState = WalletReadyState.Installed;
                     this.emit('readyStateChange', this._readyState);
                     return true;
@@ -93,7 +93,7 @@ export class Coin98WalletAdapter extends BaseMessageSignerWalletAdapter {
             this._connecting = true;
 
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const wallet = window!.coin98!.sol!;
+            const wallet = window!.coin98!.sand!;
 
             let account: string;
             try {

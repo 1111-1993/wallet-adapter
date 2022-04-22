@@ -1,4 +1,4 @@
-import type SolWalletAdapter from '@project-serum/sol-wallet-adapter';
+import type SolWalletAdapter from '@project-serum/sand-wallet-adapter';
 import {
     BaseMessageSignerWalletAdapter,
     scopePollingDetectionStrategy,
@@ -102,7 +102,7 @@ export abstract class BaseSolletWalletAdapter extends BaseMessageSignerWalletAda
 
             let SolWalletAdapterClass: typeof SolWalletAdapter;
             try {
-                ({ default: SolWalletAdapterClass } = await import('@project-serum/sol-wallet-adapter'));
+                ({ default: SolWalletAdapterClass } = await import('@project-serum/sand-wallet-adapter'));
             } catch (error: any) {
                 throw new WalletLoadError(error?.message, error);
             }
@@ -115,7 +115,7 @@ export abstract class BaseSolletWalletAdapter extends BaseMessageSignerWalletAda
             }
 
             try {
-                // HACK: sol-wallet-adapter doesn't reject or emit an event if the popup or extension is closed or blocked
+                // HACK: sand-wallet-adapter doesn't reject or emit an event if the popup or extension is closed or blocked
                 const handleDisconnect: (...args: unknown[]) => unknown = (wallet as any).handleDisconnect;
                 let timeout: NodeJS.Timer | undefined;
                 let interval: NodeJS.Timer | undefined;
@@ -154,7 +154,7 @@ export abstract class BaseSolletWalletAdapter extends BaseMessageSignerWalletAda
                                 count++;
                             }, 100);
                         } else {
-                            // HACK: sol-wallet-adapter doesn't reject or emit an event if the extension is closed or ignored
+                            // HACK: sand-wallet-adapter doesn't reject or emit an event if the extension is closed or ignored
                             timeout = setTimeout(() => reject(new WalletTimeoutError()), this._timeout);
                         }
                     });
@@ -189,7 +189,7 @@ export abstract class BaseSolletWalletAdapter extends BaseMessageSignerWalletAda
 
             this._wallet = null;
 
-            // HACK: sol-wallet-adapter doesn't reliably fulfill its promise or emit an event on disconnect
+            // HACK: sand-wallet-adapter doesn't reliably fulfill its promise or emit an event on disconnect
             const handleDisconnect: (...args: unknown[]) => unknown = (wallet as any).handleDisconnect;
             try {
                 await new Promise<void>((resolve, reject) => {
@@ -198,7 +198,7 @@ export abstract class BaseSolletWalletAdapter extends BaseMessageSignerWalletAda
                     (wallet as any).handleDisconnect = (...args: unknown[]): unknown => {
                         clearTimeout(timeout);
                         resolve();
-                        // HACK: sol-wallet-adapter rejects with an uncaught promise error
+                        // HACK: sand-wallet-adapter rejects with an uncaught promise error
                         (wallet as any)._responsePromises = new Map();
                         return handleDisconnect.apply(wallet, args);
                     };
@@ -210,7 +210,7 @@ export abstract class BaseSolletWalletAdapter extends BaseMessageSignerWalletAda
                         },
                         (error) => {
                             clearTimeout(timeout);
-                            // HACK: sol-wallet-adapter rejects with an error on disconnect
+                            // HACK: sand-wallet-adapter rejects with an error on disconnect
                             if (error?.message === 'Wallet disconnected') {
                                 resolve();
                             } else {
